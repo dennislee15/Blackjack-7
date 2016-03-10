@@ -18,7 +18,8 @@ package controllers;
 
 import ninja.Result;
 import ninja.Results;
-
+import ninja.Context;
+import models.Game;
 import com.google.inject.Singleton;
 
 
@@ -29,6 +30,35 @@ public class ApplicationController {
 
         return Results.html();
 
+    }
+
+    public Result gameGet(){
+        Game g = new Game();
+        g.buildDeck();
+        g.shuffle();
+        g.deal();
+        return Results.json().render(g);
+    }
+
+    public Result hit(Context context, Game g){
+        if(context.getRequestPath().contains("hit")){
+            g.hit();
+        }
+        return Results.json().render(g);
+    }
+
+    public Result split(Context context, Game g, Card card){
+        if(context.getRequestPath().contains("split")){
+            g.split(card);
+        }
+        return Results.json().render(g);
+    }
+
+    public Result stay(Context context, Game g){
+        if(context.getRequestPath().contains("stay")){
+            g.stay();
+        }
+        return Results.json().render(g);
     }
     
     public Result helloWorldJson() {
