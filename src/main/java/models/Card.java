@@ -18,7 +18,7 @@ public class Card
         this.suit = suit;
     }
 
-    public suit getSuit()
+    public Suit getSuit()
     {
         return this.suit;
     }
