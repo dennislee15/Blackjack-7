@@ -17,4 +17,15 @@ public class playerGame extends Game
         }
         playerScore=getTotalScore(playerValues);
     }
+
+    @Override
+    public void hit()
+    {
+        cols.get(1).add(deck.get(deck.size()-1));
+        deck.remove(deck.size()-1);
+
+        playerValues.add(cols.get(1).get(cols.get(1).size()-1).getValue());
+
+        playerScore=getTotalScore(playerValues);
+    }
 }

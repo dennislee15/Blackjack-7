@@ -2,6 +2,8 @@ package models;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -82,5 +84,30 @@ public class testPlayerGame
         g.playerScore=g.getTotalScore(g.playerValues);
 
         assertEquals(20,g.playerScore);
+    }
+
+    @Test
+    public void testHit()
+    {
+        playerGame g = new playerGame();
+        g.buildDeck();
+        g.shuffle();
+        g.initialDeal();
+        String lastCardInDealerValues=g.cols.get(1).get(g.cols.get(1).size()-1).getValue();
+        for (int i = 0; i < g.playerValues.size(); i++)
+        {
+            System.out.println("Element: " + g.playerValues.get(i));
+        }
+
+        System.out.println(g.getTotalScore(g.playerValues));
+        g.hit();
+        for (int i = 0; i < g.playerValues.size(); i++)
+        {
+            System.out.println("Element: " + g.playerValues.get(i));
+        }
+
+        System.out.println(g.getTotalScore(g.playerValues));
+
+        //assertNotEquals(lastCardInDealerValues,g.cols.get(1).get(g.cols.get(1).size()-1).getValue());
     }
 }

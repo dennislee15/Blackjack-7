@@ -58,29 +58,39 @@ public abstract class Game
     }
 
     public abstract void initialDeal();
+    public abstract void hit();
 
     public int getTotalScore(ArrayList<String> scores)
     {
         int total=0;
+        int totalAces=0;
 
         for(int i=0;i<scores.size();i++)
         {
             if (scores.get(i).equals("A"))
             {
-                total+=11;
-                if (total>21)
-                {
-                    total-=11;
-                    total+=1;
-                }
+                totalAces+=1;
             }
             else
             {
                 total+=Integer.valueOf(scores.get(i));
             }
         }
+
+        for(int i=0;i<totalAces;i++)
+        {
+            if (total>21)
+            {
+                total+=1;
+                continue;
+            }
+            total+=11;
+            if (total>21)
+            {
+                total-=11;
+                total+=1;
+            }
+        }
         return total;
     }
-
-
 }
