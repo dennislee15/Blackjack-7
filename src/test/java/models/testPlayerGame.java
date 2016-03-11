@@ -91,8 +91,9 @@ public class testPlayerGame
         g.cols.get(1).add(card1);
         g.cols.get(1).add(card2);
         g.split();
-        System.out.println(g.cols.get(2).get(0).getValue());
-        //assertEquals(null, g.cols.get(1).get(1));
-        //assertEquals(card2, g.cols.get(2));
+        assertNotEquals(null, g.cols.get(2).get(0));
+        System.out.println(g.cols.get(1).contains(card2));
+        assertFalse(g.cols.get(1).contains(card2));
+        assertThat(g.cols.get(2).get(0), instanceOf(Card.class));
     }
 }

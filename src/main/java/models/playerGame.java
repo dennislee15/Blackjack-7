@@ -19,20 +19,18 @@ public class playerGame extends Game
     }
     @Override
     public void split(){
-        if(cols.get(1).get(0).value == cols.get(1).get(1).value){
-            if(cols.get(2) != null){
-                errMsg = "Invalid Split";
+        if(cols.get(1).get(0).value == cols.get(1).get(1).value) {
 
-            }
-            else{
 
-                Suit suit = cols.get(1).get(1).suit;
-                String value = cols.get(1).get(1).value;
-                Card newCard = new Card(value, suit);
-                cols.get(1).remove(1);
-                cols.get(2).add(newCard);
+            Suit suit = cols.get(1).get(1).suit;
+            String value = cols.get(1).get(1).value;
+            Card newCard = new Card(value, suit);
+            cols.get(1).remove(1);
+            cols.get(2).add(newCard);
 
-            }
+        }
+        else{
+            errMsg = "Invalid Split";
         }
 
     }
