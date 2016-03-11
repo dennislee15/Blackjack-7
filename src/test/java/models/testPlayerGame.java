@@ -95,8 +95,64 @@ public class testPlayerGame
         g.initialDeal();
         int initialDealTotalScore=g.getTotalScore(g.playerValues);
 
-        g.hit();
+        g.hit(1);
 
         assertNotEquals(initialDealTotalScore,g.getTotalScore(g.playerValues));
     }
+
+    @Test
+    public void testStay()
+    {
+        playerGame g = new playerGame();
+        g.buildDeck();
+        g.shuffle();
+        g.initialDeal();
+
+        int score=g.playerScore;
+
+        g.stay(1);
+
+        assertEquals(score,g.playerScore);
+        assertNotEquals(g.playerValues.size(),0);
+
+        g.playerValues.add("10");
+        g.playerValues.add("10");
+        g.playerScore=g.getTotalScore(g.playerValues);
+
+        g.stay(1);
+
+        assertEquals(g.playerScore,0);
+        assertEquals(g.playerValues.size(),0);
+    }
+
+    @Test
+    public void testCheckWinner()
+    {
+        playerGame player = new playerGame();
+        dealerGame dealer = new dealerGame();
+
+        player.buildDeck();
+        player.shuffle();
+        dealer.buildDeck();
+        dealer.shuffle();
+
+        player.initialDeal();
+        dealer.initialDeal();
+
+        String winner = player.checkWinner(dealer,player);
+
+        if (player.playerScore > dealer.dealerScore)
+        {
+            assertEquals(winner,"player");
+        }
+        else if (dealer.dealerScore > player.playerScore)
+        {
+            assertEquals(winner,"dealer");
+        }
+        else
+        {
+            assertEquals(winner,"draw");
+        }
+    }
+
 }

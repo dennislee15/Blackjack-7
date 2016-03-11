@@ -11,8 +11,10 @@ public abstract class Game
 {
     public int playerScore;
     public int dealerScore;
+    public int splitScore;
     public ArrayList<String> playerValues = new ArrayList<>();
     public ArrayList<String> dealerValues = new ArrayList<>();
+    public ArrayList<String> splitValues = new ArrayList<>();
 
     public java.util.List<Card> deck = new ArrayList<>();
 
@@ -21,6 +23,7 @@ public abstract class Game
     public Game()
     {
         playerScore=0;
+        splitScore=0;
         dealerScore=0;
 
         cols.add(new ArrayList<Card>());
@@ -58,7 +61,8 @@ public abstract class Game
     }
 
     public abstract void initialDeal();
-    public abstract void hit();
+    public abstract void hit(int colNum);
+    public abstract void stay(int colNum);
 
     public int getTotalScore(ArrayList<String> scores)
     {
@@ -92,5 +96,40 @@ public abstract class Game
             }
         }
         return total;
+    }
+
+    public String checkWinner(Game dealer,Game player)
+    {
+        if (player.playerScore > player.splitScore)
+        {
+            if (dealer.dealerScore > player.playerScore)
+            {
+                return "dealer";
+            }
+            else if (player.playerScore > dealer.dealerScore)
+            {
+                return "player";
+            }
+            else
+            {
+                return "draw";
+            }
+        }
+        else
+        {
+            if (dealer.dealerScore > player.splitScore)
+            {
+                return "dealer";
+            }
+            else if (player.splitScore > dealer.dealerScore)
+            {
+                return "player";
+            }
+            else
+            {
+                return "draw";
+            }
+        }
+
     }
 }
