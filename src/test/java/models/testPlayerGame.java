@@ -126,6 +126,38 @@ public class testPlayerGame
     }
 
     @Test
+    public void testSplitStay()
+    {
+        playerGame g = new playerGame();
+        dealerGame dealer = new dealerGame();
+        dealer.buildDeck();
+        dealer.shuffle();
+        g.buildDeck();
+        g.shuffle();
+
+        dealer.initialDeal();
+        dealer.play();
+
+        g.cols.get(1).add(new Card("10",Suit.Clubs));
+        g.cols.get(1).add(new Card("10",Suit.Hearts));
+
+        g.split();
+
+        g.hit(1);
+        g.hit(1);
+
+        g.stay(1);
+
+        g.hit(2);
+        g.hit(2);
+
+        g.stay(2);
+
+        assertNotNull(g.checkWinner(dealer,g));
+
+    }
+
+    @Test
     public void testCheckWinner()
     {
         playerGame player = new playerGame();

@@ -21,6 +21,11 @@ public class playerGame extends Game
     @Override
     public void hit(int colNum)
     {
+        if (playerScore >= 21)
+        {
+            return;
+        }
+
         cols.get(colNum).add(deck.get(deck.size()-1));
         deck.remove(deck.size()-1);
 

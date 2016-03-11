@@ -165,4 +165,17 @@ public class testDealerGame
 
         assertNotEquals(g.dealerScore,16);
     }
+
+    @Test
+    public void testDealerSplit()
+    {
+        dealerGame g = new dealerGame();
+        g.buildDeck();
+        g.shuffle();
+        g.initialDeal();
+
+        g.split();
+
+        assertEquals(0,g.splitValues.size());
+    }
 }
