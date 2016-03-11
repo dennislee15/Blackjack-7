@@ -83,4 +83,16 @@ public class testPlayerGame
 
         assertEquals(20,g.playerScore);
     }
+    @Test
+    public void testPlayerSplit(){
+        playerGame g = new playerGame();
+        Card card1 = new Card("10", Suit.Hearts);
+        Card card2 = new Card("10", Suit.Clubs);
+        g.cols.get(1).add(card1);
+        g.cols.get(1).add(card2);
+        g.split();
+        System.out.println(g.cols.get(2).get(0).getValue());
+        //assertEquals(null, g.cols.get(1).get(1));
+        //assertEquals(card2, g.cols.get(2));
+    }
 }

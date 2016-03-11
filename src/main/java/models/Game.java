@@ -13,7 +13,7 @@ public abstract class Game
     public int dealerScore;
     public ArrayList<String> playerValues = new ArrayList<>();
     public ArrayList<String> dealerValues = new ArrayList<>();
-
+    public String errMsg= "";
     public java.util.List<Card> deck = new ArrayList<>();
 
     public java.util.List<java.util.List<Card>> cols = new ArrayList<>();
@@ -25,8 +25,9 @@ public abstract class Game
 
         cols.add(new ArrayList<Card>());
         cols.add(new ArrayList<Card>());
+        cols.add(new ArrayList<Card>());
     }
-
+    public abstract void split();
     public void buildDeck()
     {
         for(int i=2;i<11;i++)
