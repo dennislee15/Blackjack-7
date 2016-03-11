@@ -8,8 +8,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class Card
 {
-    public final String value;
-    public final Suit suit;
+    public String value;
+    public Suit suit;
 
     @JsonCreator
     public Card(@JsonProperty("value") String value, @JsonProperty("suit") Suit suit)

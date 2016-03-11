@@ -51,7 +51,7 @@ public class ApplicationController {
         return Results.json().render(g);
     }
 
-    public Result split(Context context, Game g, Card card){
+    public Result split(Context context, @PathParam("columnFrom") int colFrom, @PathParam("columnTo") int colTo, Game g){
         if(context.getRequestPath().contains("split")){
             g.split(card);
         }
