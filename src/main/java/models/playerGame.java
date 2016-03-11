@@ -25,8 +25,11 @@ public class playerGame extends Game
             Suit suit = cols.get(1).get(1).suit;
             String value = cols.get(1).get(1).value;
             Card newCard = new Card(value, suit);
+
             cols.get(1).remove(1);
+            playerValues.remove(value);
             cols.get(2).add(newCard);
+            splitValues.add(value);
 
         }
         else{
