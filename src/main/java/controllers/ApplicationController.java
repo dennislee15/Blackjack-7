@@ -32,7 +32,11 @@ public class ApplicationController {
 
     }
 
-    public Result gameGet(){
+    public Result blackjack(){
+        return Results.html().template("views/Blackjack/Blackjack.flt.html");
+    }
+
+    /*public Result gameGet(){
         Game g = new Game();
         g.buildDeck();
         g.shuffle();
@@ -59,7 +63,7 @@ public class ApplicationController {
             g.stay();
         }
         return Results.json().render(g);
-    }
+    }*/
     
     public Result helloWorldJson() {
         
