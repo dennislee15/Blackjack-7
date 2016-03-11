@@ -47,4 +47,10 @@ public class dealerGame extends Game
             dealerValues.clear();
         }
     }
+
+    @Override
+    public void split()
+    {
+
+    }
 }

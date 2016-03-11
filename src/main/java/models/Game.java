@@ -16,6 +16,8 @@ public abstract class Game
     public ArrayList<String> dealerValues = new ArrayList<>();
     public ArrayList<String> splitValues = new ArrayList<>();
 
+    public String errMsg= "";
+
     public java.util.List<Card> deck = new ArrayList<>();
 
     public java.util.List<java.util.List<Card>> cols = new ArrayList<>();
@@ -28,7 +30,13 @@ public abstract class Game
 
         cols.add(new ArrayList<Card>());
         cols.add(new ArrayList<Card>());
+        cols.add(new ArrayList<Card>());
     }
+
+    public abstract void initialDeal();
+    public abstract void hit(int colNum);
+    public abstract void stay(int colNum);
+    public abstract void split();
 
     public void buildDeck()
     {
@@ -60,9 +68,6 @@ public abstract class Game
         Collections.shuffle(deck, new Random(seed));
     }
 
-    public abstract void initialDeal();
-    public abstract void hit(int colNum);
-    public abstract void stay(int colNum);
 
     public int getTotalScore(ArrayList<String> scores)
     {
