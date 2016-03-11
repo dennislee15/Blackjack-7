@@ -93,21 +93,10 @@ public class testPlayerGame
         g.buildDeck();
         g.shuffle();
         g.initialDeal();
-        String lastCardInDealerValues=g.cols.get(1).get(g.cols.get(1).size()-1).getValue();
-        for (int i = 0; i < g.playerValues.size(); i++)
-        {
-            System.out.println("Element: " + g.playerValues.get(i));
-        }
+        int initialDealTotalScore=g.getTotalScore(g.playerValues);
 
-        System.out.println(g.getTotalScore(g.playerValues));
         g.hit();
-        for (int i = 0; i < g.playerValues.size(); i++)
-        {
-            System.out.println("Element: " + g.playerValues.get(i));
-        }
 
-        System.out.println(g.getTotalScore(g.playerValues));
-
-        //assertNotEquals(lastCardInDealerValues,g.cols.get(1).get(g.cols.get(1).size()-1).getValue());
+        assertNotEquals(initialDealTotalScore,g.getTotalScore(g.playerValues));
     }
 }

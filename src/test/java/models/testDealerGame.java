@@ -82,4 +82,18 @@ public class testDealerGame
 
         assertEquals(20,g.playerScore);
     }
+
+    @Test
+    public void testHit()
+    {
+        dealerGame g = new dealerGame();
+        g.buildDeck();
+        g.shuffle();
+        g.initialDeal();
+        int initialDealTotalScore=g.getTotalScore(g.dealerValues);
+
+        g.hit();
+
+        assertNotEquals(initialDealTotalScore,g.getTotalScore(g.dealerValues));
+    }
 }
