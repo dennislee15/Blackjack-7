@@ -136,19 +136,19 @@ public class testDealerGame
         player.initialDeal();
         dealer.initialDeal();
 
-        String winner = dealer.checkWinner(dealer,player);
+        dealer.checkWinner(dealer.dealerScore,player.playerScore,player.splitScore);
 
         if (player.playerScore > dealer.dealerScore)
         {
-            assertEquals(winner,"player");
+            assertEquals(dealer.winner,"Player Wins");
         }
         else if (dealer.dealerScore > player.playerScore)
         {
-            assertEquals(winner,"dealer");
+            assertEquals(dealer.winner,"Dealer Wins");
         }
         else
         {
-            assertEquals(winner,"draw");
+            assertEquals(dealer.winner,"Draw");
         }
     }
 

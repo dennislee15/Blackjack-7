@@ -73,6 +73,11 @@ public class ApplicationController {
         return Results.json().render(g);
     }
 
+    public Result checkVal(Context context, @PathParam("dScore") int dScore,@PathParam("pScore") int pScore,@PathParam("spScore") int spScore,playerGame g){
+        g.checkWinner(dScore,pScore,spScore);
+        return Results.json().render(g);
+    }
+
     /*public Result gameGet(){
         Game g = new Game();
         g.buildDeck();

@@ -21,6 +21,10 @@ public class dealerGame extends Game
     @Override
     public void hit(int colNum)
     {
+        if (dealerScore >= 21)
+        {
+            return;
+        }
         cols.get(0).add(deck.get(deck.size()-1));
         deck.remove(deck.size()-1);
 
@@ -31,10 +35,12 @@ public class dealerGame extends Game
 
     public void play()
     {
+        dealerScore = getTotalScore(dealerValues);
         while(dealerScore<17)
         {
             hit(0);
         }
+        //dealerScore = getTotalScore(dealerValues);
         stay(0);
     }
 

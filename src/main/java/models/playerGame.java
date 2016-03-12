@@ -21,7 +21,7 @@ public class playerGame extends Game
     @Override
     public void hit(int colNum)
     {
-        if (playerScore >= 21)
+        if (playerScore > 21)
         {
             return;
         }
@@ -76,7 +76,8 @@ public class playerGame extends Game
             playerValues.remove(value);
             cols.get(2).add(newCard);
             splitValues.add(value);
-
+            splitScore=getTotalScore(splitValues);
+            errMsg = "Successful Split";
         }
         else
         {

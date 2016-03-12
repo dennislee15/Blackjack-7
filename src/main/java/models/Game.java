@@ -17,6 +17,7 @@ public abstract class Game
     public ArrayList<String> splitValues = new ArrayList<>();
 
     public String errMsg= "";
+    public String winner="";
 
     public java.util.List<Card> deck = new ArrayList<>();
 
@@ -103,9 +104,33 @@ public abstract class Game
         return total;
     }
 
-    public String checkWinner(Game dealer,Game player)
+    public void checkWinner(int dScore,int pScore, int spScore)
     {
-        if (player.playerScore > player.splitScore)
+        if(pScore > spScore){
+            if(dScore > pScore) {
+                winner = "Dealer Wins";
+            }
+            else if(pScore > dScore){
+                winner = "Player Wins";
+            }
+            else{
+                winner = "Draw";
+            }
+
+        }
+        else{
+            if(dScore > spScore){
+                winner =  "Dealer wins";
+            }
+            else if(spScore > dScore){
+                winner = "Player Wins because < spScore";
+            }
+            else{
+                winner = "Draw";
+            }
+
+        }
+        /*if (player.playerScore > player.splitScore)
         {
             if (dealer.dealerScore > player.playerScore)
             {
@@ -134,7 +159,7 @@ public abstract class Game
             {
                 return "draw";
             }
-        }
+        }*/
 
     }
 }

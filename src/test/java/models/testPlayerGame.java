@@ -153,7 +153,9 @@ public class testPlayerGame
 
         g.stay(2);
 
-        assertNotNull(g.checkWinner(dealer,g));
+        g.checkWinner(dealer.dealerScore,g.playerScore,g.splitScore);
+        assertNotEquals(g.winner,"");
+        //assertEquals(,g.checkWinner(dealer.dealerScore,g.playerScore,g.splitScore));
 
     }
 
@@ -171,19 +173,19 @@ public class testPlayerGame
         player.initialDeal();
         dealer.initialDeal();
 
-        String winner = player.checkWinner(dealer,player);
+        player.checkWinner(dealer.dealerScore,player.playerScore,player.splitScore);
 
         if (player.playerScore > dealer.dealerScore)
         {
-            assertEquals(winner,"player");
+            assertEquals(player.winner,"player");
         }
         else if (dealer.dealerScore > player.playerScore)
         {
-            assertEquals(winner,"dealer");
+            assertEquals(player.winner,"dealer");
         }
         else
         {
-            assertEquals(winner,"draw");
+            assertEquals(player.winner,"draw");
         }
     }
 

@@ -91,15 +91,20 @@ var counter;
 var ifSplit = 0;
 var dealerFCard;
 var firstCard;
+var pScore,spScore,dScore;
+var winner;
 
 function start(){
  $.ajax({
   type: "GET",
   url: "/game/player",
   data: JSON.stringify(game),
-  success: function(data, status){console.log("Data: " + data + "\nStatus: " + status);
+  success: function(data, status){console.log("PlayerStartData: " + data + "\nStatus: " + status);
         game = data;
-        displayUser(data);},
+        pScore = game['playerScore'];
+        spScore = game['splitScore'];
+        displayUser(data);
+        },
   contentType:"application/json; charset=utf-8",
   dataType:"json",
 });
@@ -110,9 +115,11 @@ function start2(){
   type: "GET",
   url: "/game/dealer",
   data2: JSON.stringify(game2),
-  success: function(data2, status){console.log("Data2: " + data2 + "\nStatus: " + status);
+  success: function(data2, status){console.log("DealerStartData: " + data2 + "\nStatus: " + status);
         game2 = data2;
-        displayDealer(data2);},
+        dScore = game2['dealerScore'];
+        displayDealer(data2);
+        },
   contentType:"application/json; charset=utf-8",
   dataType:"json",
 });
@@ -120,6 +127,7 @@ function start2(){
 
 start();
 start2();
+
 
 function displayUser(game) {
 counter = 0;
@@ -133,8 +141,7 @@ $( '.columnOfCards .cardLocation' ).html("");
      });
      $.each(game2.cols[0], function( key, val ) {
         if(counter == 0){
-            $( '#dealerc0 .l'+key ).html("hidden");
-            alert("hidden");
+            $( '#dealerc0 .l'+key ).html("Hidden");
             dealerFCard = val.value + " of " + val.suit;
             counter = 1;
         }
@@ -150,8 +157,7 @@ console.log(game2);
 $( '.columnOfCards .cardLocation' ).html("");
      $.each(game2.cols[0], function( key, val ) {
             if(counter == 0){
-              $( '#dealerc0 .l'+key ).html("hidden");
-              alert("hidden");
+              $( '#dealerc0 .l'+key ).html("Hidden");
               dealerFCard = val.value + " of " + val.suit;
               counter = 1;
             }
@@ -161,6 +167,9 @@ $( '.columnOfCards .cardLocation' ).html("");
         });
      $.each(game.cols[1], function( key, val ) {
             $( '#c1 .l'+key ).html(val.value + " of " + val.suit);
+     });
+     $.each(game.cols[2], function( key, val ) {
+            $( '#c2 .l'+key ).html(val.value + " of " + val.suit);
      });
 }
 
@@ -176,7 +185,6 @@ $( '.columnOfCards .cardLocation' ).html("");
      });
      $.each(game2.cols[0], function( key, val ) {
             if(firstCard == 0){
-                alert(dealerFCard);
                 $( '#dealerc0 .l'+key ).html(dealerFCard);
                 firstCard = 1;
             }
@@ -192,7 +200,6 @@ console.log(game2);
 $( '.columnOfCards .cardLocation' ).html("");
      $.each(game2.cols[0], function( key, val ) {
         if(firstCard == 0){
-                alert(dealerFCard);
                $( '#dealerc0 .l0' ).html(dealerFCard);
                firstCard = 1;
         }
@@ -202,6 +209,9 @@ $( '.columnOfCards .cardLocation' ).html("");
         });
      $.each(game.cols[1], function( key, val ) {
             $( '#c1 .l'+key ).html(val.value + " of " + val.suit);
+     });
+     $.each(game.cols[2], function( key, val ) {
+            $( '#c2 .l'+key ).html(val.value + " of " + val.suit);
      });
 }
 
@@ -213,6 +223,8 @@ $.ajax({
   success: function(data, status){console.log("Data: " + data + "\nStatus: " + status);
         game = data;
         console.log(game);
+        pScore = game['playerScore'];
+        spScore = game['splitScore'];
         displayUser(data);
         displayDealer(game2);
         },
@@ -222,7 +234,12 @@ $.ajax({
 }
 
 $("#hitButton").click(function(){
-    hit(1);
+    if(ifSplit == 0 || ifSplit == 1){
+        hit(1);
+    }
+    else{
+        hit(2);
+    }
 });
 
 $("#newGame").click(function(){
@@ -247,23 +264,147 @@ $.ajax({
 });
 });
 
+function playTheGame(){
+
+}
+
+function checkTheGame(){
+alert("passing in dscore: " + dScore);
+alert("passing in pscore: " + pScore);
+
+}
+///////////////////////////////////////////////////////////////////////////////////////////////
 $("#stayButton").click(function(){
    if(ifSplit == 0){
-        $.ajax({
+        //playTheGame();
+        //checkTheGame();
+$.ajax({
   type: "POST",
-  url: "/stayNotSplit",
+  url: "/noSplitData",
   data: JSON.stringify(game2),
-  success: function(data, status){console.log("Data: " + data + "\nStatus: " + status);
+  success: function(data, status){console.log("DealerDataPlayedGame: " + data + "\nStatus: " + status);
         game2 = data;
         dealerDisplayFull(game2);
         displayFull(game);
+        dScore = game2['dealerScore'];
+        pScore = game['playerScore'];
+        if (dScore > pScore)
+        {
+            document.getElementById("textArea").innerHTML = "Dealer wins";
+        }
+        else if (pScore > dScore)
+        {
+            document.getElementById("textArea").innerHTML = "Player wins";
+        }
+        else
+        {
+            document.getElementById("textArea").innerHTML = "Draw";
+        }
+        //alert("pScore: " + pScore);
+        //alert("first objectDealerScore: " + game2['dealerScore']);
     },
   contentType:"application/json; charset=utf-8",
   dataType:"json",
 });
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+//alert("passing in dScore: " + dScore);
+//alert("passing in pScore: " + pScore);
+   }
+
+    else if(ifSplit == 1){
+        document.getElementById("textArea").innerHTML = "Now playing split hand";
+        ifSplit = 2;
     }
 
+    else{
+        $.ajax({
+  type: "POST",
+  url: "/noSplitData",
+  data: JSON.stringify(game2),
+  success: function(data, status){console.log("Data: " + data + "\nStatus: " + status);
+        alert("hello");
+        game2 = data;
+        //var winner = game2['winner'];
+        dealerDisplayFull(game2);
+        displayFull(game);
+        //document.getElementById("textArea").innerHTML = winner;
+    },
+  contentType:"application/json; charset=utf-8",
+  dataType:"json",
+});
+
+//-------------------------------------------------------------------------------------------------
+       /* $.ajax({
+  type: "POST",
+  url: "/noSplitData",
+  data: JSON.stringify(game2),
+  success: function(data, status){console.log("DealerDataPlayedGame: " + data + "\nStatus: " + status);
+        game2 = data;
+        dealerDisplayFull(game2);
+        displayFull(game);
+        dScore = game2['dealerScore'];
+        pScore = game['playerScore'];
+        spScore = game['splitScore'];
+        if (dScore > 21)
+        {
+            dScore = 0;
+        }
+        if (pScore > 21)
+        {
+            pScore = 0;
+        }
+        if (spScore > 21)
+        {
+            spScore = 0;
+        }
+        alert(dScore);
+        if ((pScore > spScore))
+        {
+            if (dScore > pScore)
+            {
+                document.getElementById("textArea").innerHTML = "Dealer wins";
+            }
+            else if (pScore > dScore)
+            {
+                document.getElementById("textArea").innerHTML = "Player wins";
+            }
+            else
+            {
+                document.getElementById("textArea").innerHTML = "Draw";
+            }
+        }
+        else if ((spScore>pScore))
+        {
+            if (dScore > spScore)
+            {
+                document.getElementById("textArea").innerHTML = "Dealer wins";
+            }
+            else if (spScore > dScore)
+            {
+                document.getElementById("textArea").innerHTML = "Player wins";
+            }
+            else
+            {
+                document.getElementById("textArea").innerHTML = "Draw";
+            }
+        }
+        else if (spScore==pScore)
+        {
+            document.getElementById("textArea").innerHTML = "Draw sp=p";
+        }
+        else
+        {
+            document.getElementById("textArea").innerHTML = "Dealer";
+        }
+        //alert("pScore: " + pScore);
+        //alert("first objectDealerScore: " + game2['dealerScore']);
+    },
+  contentType:"application/json; charset=utf-8",
+  dataType:"json",
+}); */
+    }
 
 });
 
