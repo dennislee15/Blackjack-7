@@ -17,11 +17,56 @@ public class playerGame extends Game
         }
         playerScore=getTotalScore(playerValues);
     }
+
     @Override
-    public void split(){
-        if(cols.get(1).get(0).value == cols.get(1).get(1).value) {
+    public void hit(int colNum)
+    {
+        if (playerScore >= 21)
+        {
+            return;
+        }
 
+        cols.get(colNum).add(deck.get(deck.size()-1));
+        deck.remove(deck.size()-1);
 
+        if (colNum==1)
+        {
+            playerValues.add(cols.get(colNum).get(cols.get(colNum).size()-1).getValue());
+            playerScore=getTotalScore(playerValues);
+        }
+        else
+        {
+            splitValues.add(cols.get(colNum).get(cols.get(colNum).size()-1).getValue());
+            splitScore=getTotalScore(splitValues);
+        }
+    }
+
+    @Override
+    public void stay(int colNum)
+    {
+        if (colNum==1)
+        {
+            if (playerScore > 21)
+            {
+                playerScore = 0;
+                playerValues.clear();
+            }
+        }
+        else
+        {
+            if(splitScore > 21)
+            {
+                splitScore = 0;
+                splitValues.clear();
+            }
+        }
+    }
+
+    @Override
+    public void split()
+    {
+        if(cols.get(1).get(0).value == cols.get(1).get(1).value)
+        {
             Suit suit = cols.get(1).get(1).suit;
             String value = cols.get(1).get(1).value;
             Card newCard = new Card(value, suit);
@@ -32,9 +77,9 @@ public class playerGame extends Game
             splitValues.add(value);
 
         }
-        else{
+        else
+        {
             errMsg = "Invalid Split";
         }
-
     }
 }

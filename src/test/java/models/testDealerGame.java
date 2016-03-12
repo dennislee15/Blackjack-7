@@ -82,4 +82,100 @@ public class testDealerGame
 
         assertEquals(20,g.playerScore);
     }
+
+    @Test
+    public void testHit()
+    {
+        dealerGame g = new dealerGame();
+        g.buildDeck();
+        g.shuffle();
+        g.initialDeal();
+        int initialDealTotalScore=g.getTotalScore(g.dealerValues);
+
+        g.hit(0);
+
+        assertNotEquals(initialDealTotalScore,g.getTotalScore(g.dealerValues));
+    }
+
+    @Test
+    public void testStay()
+    {
+        dealerGame g = new dealerGame();
+        g.buildDeck();
+        g.shuffle();
+        g.initialDeal();
+
+        int score=g.dealerScore;
+
+        g.stay(1);
+
+        assertEquals(score,g.dealerScore);
+        assertNotEquals(g.dealerValues.size(),0);
+
+        g.dealerValues.add("10");
+        g.dealerValues.add("10");
+        g.dealerScore=g.getTotalScore(g.dealerValues);
+
+        g.stay(1);
+
+        assertEquals(g.dealerScore,0);
+        assertEquals(g.dealerValues.size(),0);
+    }
+
+    @Test
+    public void testCheckWinner()
+    {
+        playerGame player = new playerGame();
+        dealerGame dealer = new dealerGame();
+
+        player.buildDeck();
+        player.shuffle();
+        dealer.buildDeck();
+        dealer.shuffle();
+
+        player.initialDeal();
+        dealer.initialDeal();
+
+        String winner = dealer.checkWinner(dealer,player);
+
+        if (player.playerScore > dealer.dealerScore)
+        {
+            assertEquals(winner,"player");
+        }
+        else if (dealer.dealerScore > player.playerScore)
+        {
+            assertEquals(winner,"dealer");
+        }
+        else
+        {
+            assertEquals(winner,"draw");
+        }
+    }
+
+    @Test
+    public void testPlay()
+    {
+        dealerGame g = new dealerGame();
+        g.buildDeck();
+        g.shuffle();
+        g.dealerValues.add("10");
+        g.dealerValues.add("6");
+
+        g.play();
+
+        assertNotEquals(g.dealerScore,16);
+    }
+
+    @Test
+    public void testDealerSplit()
+    {
+        dealerGame g = new dealerGame();
+        g.buildDeck();
+        g.shuffle();
+        g.initialDeal();
+
+        g.split();
+
+        assertEquals(0,g.splitValues.size());
+    }
 }

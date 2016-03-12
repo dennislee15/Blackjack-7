@@ -17,8 +17,40 @@ public class dealerGame extends Game
         }
         dealerScore=getTotalScore(dealerValues);
     }
+
     @Override
-    public void split(){
+    public void hit(int colNum)
+    {
+        cols.get(0).add(deck.get(deck.size()-1));
+        deck.remove(deck.size()-1);
+
+        dealerValues.add(cols.get(0).get(cols.get(0).size()-1).getValue());
+
+        dealerScore=getTotalScore(dealerValues);
+    }
+
+    public void play()
+    {
+        while(dealerScore<17)
+        {
+            hit(0);
+        }
+        stay(0);
+    }
+
+    @Override
+    public void stay(int colNum)
+    {
+        if (dealerScore > 21)
+        {
+            dealerScore = 0;
+            dealerValues.clear();
+        }
+    }
+
+    @Override
+    public void split()
+    {
 
     }
 }
