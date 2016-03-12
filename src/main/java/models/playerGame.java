@@ -29,16 +29,17 @@ public class playerGame extends Game
         cols.get(colNum).add(deck.get(deck.size()-1));
         deck.remove(deck.size()-1);
 
-        if (colNum==1)
-        {
-            playerValues.add(cols.get(colNum).get(cols.get(colNum).size()-1).getValue());
-            playerScore=getTotalScore(playerValues);
+        if (colNum==1) {
+            playerValues.add(cols.get(colNum).get(cols.get(colNum).size() - 1).getValue());
+            playerScore = getTotalScore(playerValues);
         }
+
         else
         {
             splitValues.add(cols.get(colNum).get(cols.get(colNum).size()-1).getValue());
             splitScore=getTotalScore(splitValues);
         }
+
     }
 
     @Override
@@ -65,7 +66,7 @@ public class playerGame extends Game
     @Override
     public void split()
     {
-        if(cols.get(1).get(0).value == cols.get(1).get(1).value)
+        if(cols.get(1).get(0).value.equals(cols.get(1).get(1).value))
         {
             Suit suit = cols.get(1).get(1).suit;
             String value = cols.get(1).get(1).value;

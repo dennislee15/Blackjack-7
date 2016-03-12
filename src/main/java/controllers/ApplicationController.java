@@ -23,6 +23,7 @@ import ninja.Results;
 import ninja.Context;
 import models.dealerGame;
 import com.google.inject.Singleton;
+import ninja.params.PathParam;
 
 
 @Singleton
@@ -52,6 +53,23 @@ public class ApplicationController {
         g.buildDeck();
         g.shuffle();
         g.initialDeal();
+        return Results.json().render(g);
+    }
+
+    public Result playerHit(Context context, @PathParam("columnTo") int col, playerGame g) {
+        if(context.getRequestPath().contains("player")){
+            g.hit(col);
+        }
+        return Results.json().render(g);
+    }
+
+    public Result split(Context context, playerGame g){
+        g.split();
+        return Results.json().render(g);
+    }
+
+    public Result dealerPlay(Context context, dealerGame g){
+        g.play();
         return Results.json().render(g);
     }
 

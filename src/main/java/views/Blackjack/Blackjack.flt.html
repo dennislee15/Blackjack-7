@@ -38,22 +38,11 @@
     <div class="col-md-10">
     <table class="table">
         <tr class="title">
-            <td>Split Hand1</td>
             <td>Your Hand</td>
-            <td>Split Hand2</td>
+            <td>Split Hand</td>
         </tr>
 
-        <tr><td class="columnOfCards" id="c0">
-            <table class="table">
-                <tr><td class="cardLocation l0"></td></tr>
-                <tr><td class="cardLocation l1"></td></tr>
-                <tr><td class="cardLocation l2"></td></tr>
-                <tr><td class="cardLocation l3"></td></tr>
-                <tr><td class="cardLocation l4"></td></tr>
-                <tr><td class="cardLocation l5"></td></tr>
-            </table>
-        </td>
-            <td class="columnOfCards" id="c1">
+        <tr><td class="columnOfCards" id="c1">
                 <table class="table">
                     <tr><td class="cardLocation l0"></td></tr>
                     <tr><td class="cardLocation l1"></td></tr>
@@ -61,7 +50,7 @@
                     <tr><td class="cardLocation l3"></td></tr>
                     <tr><td class="cardLocation l4"></td></tr>
                     <tr><td class="cardLocation l5"></td></tr>
-                    <tr><td><button id="Remove1" class="btn btn-success">split?</button></td></tr>
+                    <tr><td><button id="splitButton" class="btn btn-success">Split</button></td></tr>
                 </table>
             </td>
             <td class="columnOfCards" id="c2">
@@ -98,6 +87,11 @@
 <script>
 var game;
 var game2;
+var counter;
+var ifSplit = 0;
+var dealerFCard;
+var firstCard;
+
 function start(){
  $.ajax({
   type: "GET",
@@ -105,7 +99,7 @@ function start(){
   data: JSON.stringify(game),
   success: function(data, status){console.log("Data: " + data + "\nStatus: " + status);
         game = data;
-        display(data);},
+        displayUser(data);},
   contentType:"application/json; charset=utf-8",
   dataType:"json",
 });
@@ -127,82 +121,152 @@ function start2(){
 start();
 start2();
 
-function display(game) {
+function displayUser(game) {
+counter = 0;
 console.log(game);
 $( '.columnOfCards .cardLocation' ).html("");
-     /*$.each(game.cols[0], function( key, val ) {
-            $( '#c1 .l'+key ).html(val.value + " of " + val.suit);
-        });*/
      $.each(game.cols[1], function( key, val ) {
             $( '#c1 .l'+key ).html(val.value + " of " + val.suit);
      });
-          $.each(game2.cols[0], function( key, val ) {
+     $.each(game.cols[2], function( key, val ) {
+            $( '#c2 .l'+key ).html(val.value + " of " + val.suit);
+     });
+     $.each(game2.cols[0], function( key, val ) {
+        if(counter == 0){
             $( '#dealerc0 .l'+key ).html("hidden");
-        });
+            alert("hidden");
+            dealerFCard = val.value + " of " + val.suit;
+            counter = 1;
+        }
+        else{
+            $( '#dealerc0 .l'+key ).html(val.value + " of " + val.suit);
+        }
+     });
 }
 
 function displayDealer(game2) {
+counter = 0;
 console.log(game2);
 $( '.columnOfCards .cardLocation' ).html("");
      $.each(game2.cols[0], function( key, val ) {
-            $( '#dealerc0 .l'+key ).html(val.value + " of " + val.suit);
+            if(counter == 0){
+              $( '#dealerc0 .l'+key ).html("hidden");
+              alert("hidden");
+              dealerFCard = val.value + " of " + val.suit;
+              counter = 1;
+            }
+            else{
+               $( '#dealerc0 .l'+key ).html(val.value + " of " + val.suit);
+            }
         });
      $.each(game.cols[1], function( key, val ) {
             $( '#c1 .l'+key ).html(val.value + " of " + val.suit);
      });
 }
 
-$("#dealButton").click(function(){
-// deal for american deck
+function displayFull(game) {
+firstCard = 0
+console.log(game);
+$( '.columnOfCards .cardLocation' ).html("");
+     $.each(game.cols[1], function( key, val ) {
+            $( '#c1 .l'+key ).html(val.value + " of " + val.suit);
+     });
+     $.each(game.cols[2], function( key, val ) {
+            $( '#c2 .l'+key ).html(val.value + " of " + val.suit);
+     });
+     $.each(game2.cols[0], function( key, val ) {
+            if(firstCard == 0){
+                alert(dealerFCard);
+                $( '#dealerc0 .l'+key ).html(dealerFCard);
+                firstCard = 1;
+            }
+            else{
+            $( '#dealerc0 .l'+key ).html(val.value + " of " + val.suit);
+            }
+     });
+}
+
+function dealerDisplayFull(game2) {
+firstCard = 0;
+console.log(game2);
+$( '.columnOfCards .cardLocation' ).html("");
+     $.each(game2.cols[0], function( key, val ) {
+        if(firstCard == 0){
+                alert(dealerFCard);
+               $( '#dealerc0 .l0' ).html(dealerFCard);
+               firstCard = 1;
+        }
+        else{
+               $( '#dealerc0 .l'+key ).html(val.value + " of " + val.suit);
+        }
+        });
+     $.each(game.cols[1], function( key, val ) {
+            $( '#c1 .l'+key ).html(val.value + " of " + val.suit);
+     });
+}
+
+function hit(colNumber){
 $.ajax({
   type: "POST",
-  url: "/deal",
+  url: "/hit/player/"+colNumber,
   data: JSON.stringify(game),
   success: function(data, status){console.log("Data: " + data + "\nStatus: " + status);
         game = data;
-        display(data);},
+        console.log(game);
+        displayUser(data);
+        displayDealer(game2);
+        },
   contentType:"application/json; charset=utf-8",
   dataType:"json",
 });
-});
+}
 
+$("#hitButton").click(function(){
+    hit(1);
+});
 
 $("#newGame").click(function(){
     location.reload();
 });
 
-$("#move").click(function(){
-var fromCol = document.getElementsByName('fromCol');
-for (var i = 0; i < 4; i++){
-    if(fromCol[i].checked){
-        var fromColVal = fromCol[i].value;
-    }
-}
-var toCol = document.getElementsByName('toCol');
-for (var i = 0; i < 4; i++){
-    if(toCol[i].checked){
-        var toColVal = toCol[i].value;
-    }
-}
-checkMove(fromColVal, toColVal);
-});
-
-
-function checkMove(fromColVal, toColVal){
+$("#splitButton").click(function(){
+ifSplit = 1;
 $.ajax({
   type: "POST",
-  url: "/moveCardsp/"+fromColVal+"/"+toColVal,
+  url: "/split",
   data: JSON.stringify(game),
   success: function(data, status){console.log("Data: " + data + "\nStatus: " + status);
         game = data;
         var errMsg=game["errMsg"];
-        display(data);
+        displayUser(data);
+        displayDealer(game2);
         document.getElementById("textArea").innerHTML=errMsg;
 },
   contentType:"application/json; charset=utf-8",
   dataType:"json",
 });
-}
+});
+
+$("#stayButton").click(function(){
+   if(ifSplit == 0){
+        $.ajax({
+  type: "POST",
+  url: "/stayNotSplit",
+  data: JSON.stringify(game2),
+  success: function(data, status){console.log("Data: " + data + "\nStatus: " + status);
+        game2 = data;
+        dealerDisplayFull(game2);
+        displayFull(game);
+    },
+  contentType:"application/json; charset=utf-8",
+  dataType:"json",
+});
+
+    }
+
+
+});
+
 </script>
 
 </body>
