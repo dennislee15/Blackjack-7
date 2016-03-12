@@ -2,6 +2,8 @@ package models;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -82,5 +84,121 @@ public class testPlayerGame
         g.playerScore=g.getTotalScore(g.playerValues);
 
         assertEquals(20,g.playerScore);
+    }
+
+    @Test
+    public void testHit()
+    {
+        playerGame g = new playerGame();
+        g.buildDeck();
+        g.shuffle();
+        g.initialDeal();
+        int initialDealTotalScore=g.getTotalScore(g.playerValues);
+
+        g.hit(1);
+
+        assertNotEquals(initialDealTotalScore,g.getTotalScore(g.playerValues));
+    }
+
+    @Test
+    public void testStay()
+    {
+        playerGame g = new playerGame();
+        g.buildDeck();
+        g.shuffle();
+        g.initialDeal();
+
+        int score=g.playerScore;
+
+        g.stay(1);
+
+        assertEquals(score,g.playerScore);
+        assertNotEquals(g.playerValues.size(),0);
+
+        g.playerValues.add("10");
+        g.playerValues.add("10");
+        g.playerScore=g.getTotalScore(g.playerValues);
+
+        g.stay(1);
+
+        assertEquals(g.playerScore,0);
+        assertEquals(g.playerValues.size(),0);
+    }
+
+    @Test
+    public void testSplitStay()
+    {
+        playerGame g = new playerGame();
+        dealerGame dealer = new dealerGame();
+        dealer.buildDeck();
+        dealer.shuffle();
+        g.buildDeck();
+        g.shuffle();
+
+        dealer.initialDeal();
+        dealer.play();
+
+        g.cols.get(1).add(new Card("10",Suit.Clubs));
+        g.cols.get(1).add(new Card("10",Suit.Hearts));
+
+        g.split();
+
+        g.hit(1);
+        g.hit(1);
+
+        g.stay(1);
+
+        g.hit(2);
+        g.hit(2);
+
+        g.stay(2);
+
+        assertNotNull(g.checkWinner(dealer,g));
+
+    }
+
+    @Test
+    public void testCheckWinner()
+    {
+        playerGame player = new playerGame();
+        dealerGame dealer = new dealerGame();
+
+        player.buildDeck();
+        player.shuffle();
+        dealer.buildDeck();
+        dealer.shuffle();
+
+        player.initialDeal();
+        dealer.initialDeal();
+
+        String winner = player.checkWinner(dealer,player);
+
+        if (player.playerScore > dealer.dealerScore)
+        {
+            assertEquals(winner,"player");
+        }
+        else if (dealer.dealerScore > player.playerScore)
+        {
+            assertEquals(winner,"dealer");
+        }
+        else
+        {
+            assertEquals(winner,"draw");
+        }
+    }
+
+    @Test
+    public void testPlayerSplit()
+    {
+        playerGame g = new playerGame();
+        Card card1 = new Card("10", Suit.Hearts);
+        Card card2 = new Card("10", Suit.Clubs);
+        g.cols.get(1).add(card1);
+        g.cols.get(1).add(card2);
+        g.split();
+        assertNotEquals(null, g.cols.get(2).get(0));
+        System.out.println(g.cols.get(1).contains(card2));
+        assertFalse(g.cols.get(1).contains(card2));
+        assertThat(g.cols.get(2).get(0), instanceOf(Card.class));
     }
 }
