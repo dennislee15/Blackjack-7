@@ -16,10 +16,12 @@
 
 package controllers;
 
+import models.Game;
+import models.playerGame;
 import ninja.Result;
 import ninja.Results;
 import ninja.Context;
-import models.Game;
+import models.dealerGame;
 import com.google.inject.Singleton;
 
 
@@ -33,7 +35,24 @@ public class ApplicationController {
     }
 
     public Result blackjack(){
+
         return Results.html().template("views/Blackjack/Blackjack.flt.html");
+    }
+
+    public Result playerGameGet(){
+        playerGame g = new playerGame();
+        g.buildDeck();
+        g.shuffle();
+        g.initialDeal();
+        return Results.json().render(g);
+    }
+
+    public Result dealerGameGet(){
+        dealerGame g = new dealerGame();
+        g.buildDeck();
+        g.shuffle();
+        g.initialDeal();
+        return Results.json().render(g);
     }
 
     /*public Result gameGet(){
