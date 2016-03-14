@@ -288,6 +288,11 @@ $.ajax({
         displayFull(game);
         dScore = game2['dealerScore'];
         pScore = game['playerScore'];
+        alert(dScore);
+        alert(pScore);
+        if(pScore > 21){
+            pScore = 0;
+        }
         if (dScore > pScore)
         {
             document.getElementById("textArea").innerHTML = "Dealer wins";
@@ -300,8 +305,6 @@ $.ajax({
         {
             document.getElementById("textArea").innerHTML = "Draw";
         }
-        //alert("pScore: " + pScore);
-        //alert("first objectDealerScore: " + game2['dealerScore']);
     },
   contentType:"application/json; charset=utf-8",
   dataType:"json",
@@ -309,10 +312,7 @@ $.ajax({
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
-//alert("passing in dScore: " + dScore);
-//alert("passing in pScore: " + pScore);
    }
-
     else if(ifSplit == 1){
         document.getElementById("textArea").innerHTML = "Now playing split hand";
         ifSplit = 2;
@@ -324,12 +324,43 @@ $.ajax({
   url: "/noSplitData",
   data: JSON.stringify(game2),
   success: function(data, status){console.log("Data: " + data + "\nStatus: " + status);
-        alert("hello");
         game2 = data;
-        //var winner = game2['winner'];
         dealerDisplayFull(game2);
         displayFull(game);
-        //document.getElementById("textArea").innerHTML = winner;
+        dScore = game2['dealerScore'];
+        pScore = game['playerScore'];
+        spScore = game['splitScore'];
+        if(pScore > 21){
+            pScore = 0;
+        }
+        if(spScore > 21){
+            spScore = 0;
+        }
+        if(pScore > spScore){
+        if (dScore > pScore){
+            document.getElementById("textArea").innerHTML = "Dealer wins";
+        }
+        else if (pScore > dScore)
+        {
+            document.getElementById("textArea").innerHTML = "Player wins";
+        }
+        else
+        {
+            document.getElementById("textArea").innerHTML = "Draw";
+        }
+        }
+        else if(spScore > pScore){
+            if(dScore > spScore){
+            document.getElementById("textArea").innerHTML = "Dealer wins";
+            }
+            else if(spScore > dScore){
+                        document.getElementById("textArea").innerHTML = "Player split hand wins";
+            }
+            else{
+                        document.getElementById("textArea").innerHTML = "Draw";
+            }
+
+        }
     },
   contentType:"application/json; charset=utf-8",
   dataType:"json",
